@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">EigoNews</string>
+    <string name="default_news_content">Something went wrong, please swipe down to refresh.</string>
+    <string name="default_news_image_description">News Image</string>
 </resources>
