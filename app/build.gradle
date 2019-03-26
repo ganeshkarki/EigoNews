@@ -1,5 +1,11 @@
 apply plugin: 'com.android.application'
 
+def GOOGLE_NEWS_API_KEY = '"' + GOOGLE_NEWS_API_KEY + '"' ?: '"Define Google News Api key"'
+
+android.buildTypes.each {
+    it.buildConfigField 'String', 'GOOGLE_NEWS_API_KEY', GOOGLE_NEWS_API_KEY
+}
+
 android {
     compileSdkVersion 28
     defaultConfig {
