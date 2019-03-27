@@ -1,4 +1,4 @@
-package com.classroom.eigonews;
+package com.paradox.eigonews;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.classroom.eigonews", appContext.getPackageName());
+        assertEquals("com.paradox.eigonews", appContext.getPackageName());
     }
 }

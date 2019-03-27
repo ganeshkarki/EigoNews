@@ -1,4 +1,4 @@
-package com.classroom.eigonews;
+package com.paradox.eigonews;
 
 import org.junit.Test;
 

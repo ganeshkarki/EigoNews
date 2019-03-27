@@ -1,4 +1,4 @@
-package com.classroom.eigonews;
+package com.paradox.eigonews;
 
 import android.content.Context;
 import android.graphics.Bitmap;
