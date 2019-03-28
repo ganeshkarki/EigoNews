@@ -17,7 +17,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,22 +24,18 @@ import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
-    private int newsCount = 1;
-
     MyAdapter mAdapter;
     VerticalViewPager mPager;
+    String url = "https://newsapi.org/v2/top-headlines?country=jp&apiKey=" + BuildConfig.GOOGLE_NEWS_API_KEY;
 
+    private int newsCount = 1;
     private static final String TAG = "MainActivity";
-
     private JSONArray articleJson;
-    String url = "https://newsapi.org/v2/top-headlines?country=jp&apiKey=".concat(BuildConfig.GOOGLE_NEWS_API_KEY);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // defaulttextView = findViewById(R.id.default_text);
-
         initializNewsDataFromApi();
         mAdapter = new MyAdapter(getSupportFragmentManager(), this.newsCount, this.articleJson);
         mPager = findViewById(R.id.viewpager);
@@ -49,9 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     protected void initializNewsDataFromApi() {
-        queue = Volley.newRequestQueue(this);
-
-        Log.d(TAG, "GOOGLE API KEY:" + BuildConfig.GOOGLE_NEWS_API_KEY ); // TODO: Remove this LOG
+        Log.d(TAG, "GOOGLE API KEY:" + BuildConfig.GOOGLE_NEWS_API_KEY ); // TODO: Remove LOG
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
@@ -65,10 +58,10 @@ public class MainActivity extends AppCompatActivity {
 
                     mAdapter.update(newsCount, articleJson);
                     Toast.makeText(MainActivity.this, "Data fetched", Toast.LENGTH_LONG).show();
-                    Log.d(TAG, "news count fetched: " + newsCount + articleJson.toString()); // TODO: Remove this LOG
+                    Log.d(TAG, "news count fetched: " + newsCount + articleJson.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Log.e(TAG, "Something went wrong " + e.getMessage() ); // TODO: Remove this LOG
+                    Log.e(TAG, "Something went wrong " + e.getMessage());
                 }
             }
         }, new Response.ErrorListener() {
@@ -88,10 +81,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     public static class MyAdapter extends SmartFragmentStatePagerAdapter {
-
         Integer newsCount;
-
         JSONArray articleJson;
+
         MyAdapter(FragmentManager fm, int articleCount, JSONArray articleJson) {
             super(fm);
             this.newsCount = articleCount;
@@ -143,14 +135,11 @@ public class MainActivity extends AppCompatActivity {
 //            }
         }
 
-        public void update(Integer newsCount, JSONArray articleJson) {
-//            Log.d(TAG, "upadated: " + articleJson.toString() ); // TODO: Remove this LOG
-
+        void update(Integer newsCount, JSONArray articleJson) {
             this.articleJson = articleJson;
             this.newsCount = newsCount;
             notifyDataSetChanged();
         }
-
 
         public int getItemPosition(@NonNull Object item) {
 //            NewsCardFragment fragment = (NewsCardFragment) item;
@@ -166,7 +155,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static class NewsCardFragment extends Fragment {
-
         private static final String MY_NUM_KEY = "num";
         private static final String MY_COLOR_KEY = "color";
 
@@ -175,8 +163,6 @@ public class MainActivity extends AppCompatActivity {
 
         // You can modify the parameters to pass in whatever you want
         static NewsCardFragment newInstance(String num, int color, String url, String title) {
-
-//            Log.d(TAG, "Here: "+ oj.getClass() + oj.toString());
             NewsCardFragment f = new NewsCardFragment();
             Bundle args = new Bundle();
             args.putString(MY_NUM_KEY, title);
@@ -202,5 +188,4 @@ public class MainActivity extends AppCompatActivity {
             return v;
         }
     }
-
 }
