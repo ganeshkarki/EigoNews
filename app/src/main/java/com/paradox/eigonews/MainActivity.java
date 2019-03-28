@@ -1,6 +1,5 @@
 package com.paradox.eigonews;
 
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -114,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            return NewsCardFragment.newInstance("NEWS 0", Color.WHITE, url, title);
+            return NewsCardFragment.newInstance(url, title);
 //            if (position <= getCount() && articleJson != null) {
 //                return NewsCardFragment.newInstance("NEWS 0", Color.WHITE);
 //            }
@@ -155,18 +154,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static class NewsCardFragment extends Fragment {
-        private static final String MY_NUM_KEY = "num";
-        private static final String MY_COLOR_KEY = "color";
+        private static final String ARTICLE_TITLE = "num";
 
         private String mNum;
-        private int mColor;
 
         // You can modify the parameters to pass in whatever you want
-        static NewsCardFragment newInstance(String num, int color, String url, String title) {
+        static NewsCardFragment newInstance(String url, String title) {
             NewsCardFragment f = new NewsCardFragment();
             Bundle args = new Bundle();
-            args.putString(MY_NUM_KEY, title);
-            args.putInt(MY_COLOR_KEY, color);
+            args.putString(ARTICLE_TITLE, title);
             f.setArguments(args);
             return f;
         }
@@ -174,15 +170,15 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            mNum = getArguments() != null ? getArguments().getString(MY_NUM_KEY) : "NONE";
-            mColor = getArguments() != null ? getArguments().getInt(MY_COLOR_KEY) : Color.BLACK;
+            mNum = getArguments() != null
+                    ? getArguments().getString(ARTICLE_TITLE)
+                    : "Sorry something went wrong";
         }
 
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.news_card, container, false);
-            v.setBackgroundColor(mColor);
             TextView textView = v.findViewById(R.id.descriptionText);
             textView.setText(mNum);
             return v;
