@@ -21,6 +21,7 @@ class NewsCard {
         this.sourceId = article.getJSONObject("source").getString("id");
         this.author = article.getString("author");
         this.title = article.getString("title");
+        // TODO: Validate the news encoding and convert to proper if needed
         this.description = article.getString("description");
         this.url = article.getString("url");
         this.imgUrl = article.getString("urlToImage");
