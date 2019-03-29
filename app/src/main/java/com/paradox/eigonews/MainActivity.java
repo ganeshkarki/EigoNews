@@ -16,6 +16,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.NetworkImageView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -197,13 +198,15 @@ public class MainActivity extends AppCompatActivity {
         public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.fragment_news_card, container, false);
+            NetworkImageView imgView = v.findViewById(R.id.imageView);
             TextView titleText = v.findViewById(R.id.articleTitleText);
             TextView descriptionText = v.findViewById(R.id.articleContentText);
             TextView sourceText = v.findViewById(R.id.sourceCreditText);
+
+            imgView.setImageUrl(articleImgUrl, MySingleton.getInstance(getActivity()).getImageLoader());
             titleText.setText(articleTitle);
             descriptionText.setText(articleDescription);
             sourceText.setText(articleSource);
-
             return v;
         }
     }
