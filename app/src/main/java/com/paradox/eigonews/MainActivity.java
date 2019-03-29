@@ -1,6 +1,7 @@
 package com.paradox.eigonews;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -100,20 +101,20 @@ public class MainActivity extends AppCompatActivity {
             String url = "";
             String title = "";
             JSONObject article;
+            NewsCard card = null;
 
 
             if (this.articleJson != null) {
                 try {
-                    article = articleJson.getJSONObject(position);
-                    url = article.getString("urlToImage");
-                    title = article.getString("title");
+                    card = new NewsCard(articleJson.getJSONObject(position));
+                    return NewsCardFragment.newInstance(card);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.e(TAG, e.getMessage());
                 }
             }
 
-            return NewsCardFragment.newInstance(url, title);
+            return new LoadingCardFragment();
 //            if (position <= getCount() && articleJson != null) {
 //                return NewsCardFragment.newInstance("NEWS 0", Color.WHITE);
 //            }
@@ -154,15 +155,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static class NewsCardFragment extends Fragment {
-        private static final String ARTICLE_TITLE = "num";
+        private static final String ARTICLE_TITLE = "title";
+        private static final String ARTICLE_DESCRIPTION = "description";
+        private static final String ARTICLE_URL = "url";
+        private static final String ARTICLE_IMG_URL = "urlToImage";
+        private static final String ARTICLE_SOURCE = "sourceName";
 
-        private String mNum;
+        private String articleTitle, articleDescription, articleSource, articleImgUrl;
 
         // You can modify the parameters to pass in whatever you want
-        static NewsCardFragment newInstance(String url, String title) {
+        static NewsCardFragment newInstance(NewsCard article) {
             NewsCardFragment f = new NewsCardFragment();
             Bundle args = new Bundle();
-            args.putString(ARTICLE_TITLE, title);
+            args.putString(ARTICLE_SOURCE, article.getSourceName());
+            args.putString(ARTICLE_TITLE, article.getTitle());
+            args.putString(ARTICLE_DESCRIPTION, article.getDescription());
+            args.putString(ARTICLE_URL, article.getUrl());
+            args.putString(ARTICLE_IMG_URL, article.getImgUrl());
             f.setArguments(args);
             return f;
         }
@@ -170,18 +179,43 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            mNum = getArguments() != null
+            articleTitle = getArguments() != null
                     ? getArguments().getString(ARTICLE_TITLE)
                     : "Sorry something went wrong";
+            articleDescription = getArguments() != null
+                    ? getArguments().getString(ARTICLE_DESCRIPTION)
+                    : "...";
+            articleSource = getArguments() != null
+                    ? "Source: " + getArguments().getString(ARTICLE_SOURCE)
+                    : "...";
+            articleImgUrl = getArguments() != null
+                    ? getArguments().getString(ARTICLE_IMG_URL)
+                    : "...";
         }
 
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View v = inflater.inflate(R.layout.news_card, container, false);
-            TextView textView = v.findViewById(R.id.articleTitleText);
-            textView.setText(mNum);
+            View v = inflater.inflate(R.layout.fragment_news_card, container, false);
+            TextView titleText = v.findViewById(R.id.articleTitleText);
+            TextView descriptionText = v.findViewById(R.id.articleContentText);
+            TextView sourceText = v.findViewById(R.id.sourceCreditText);
+            titleText.setText(articleTitle);
+            descriptionText.setText(articleDescription);
+            sourceText.setText(articleSource);
+
             return v;
         }
     }
+
+
+
+    public static class LoadingCardFragment extends Fragment {
+
+        public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            return inflater.inflate(R.layout.fragment_loading_card, container, false);
+        }
+    }
+
 }
