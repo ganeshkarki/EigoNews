@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
         public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.news_card, container, false);
-            TextView textView = v.findViewById(R.id.descriptionText);
+            TextView textView = v.findViewById(R.id.articleTitleText);
             textView.setText(mNum);
             return v;
         }
