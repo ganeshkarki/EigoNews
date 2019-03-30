@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
         mPager.setAdapter(mAdapter);
     }
 
-
     protected void initializNewsDataFromApi() {
         Log.d(TAG, "GOOGLE API KEY:" + BuildConfig.GOOGLE_NEWS_API_KEY ); // TODO: Remove LOG
 
@@ -57,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                     articleJson = response.getJSONArray("articles");
 
                     mAdapter.update(newsCount, articleJson);
-                    Toast.makeText(MainActivity.this, "Data fetched", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "News fetched", Toast.LENGTH_LONG).show();
                     Log.d(TAG, "news count fetched: " + newsCount + articleJson.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -211,8 +210,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
     public static class LoadingCardFragment extends Fragment {
 
         public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -220,5 +217,4 @@ public class MainActivity extends AppCompatActivity {
             return inflater.inflate(R.layout.fragment_loading_card, container, false);
         }
     }
-
 }
