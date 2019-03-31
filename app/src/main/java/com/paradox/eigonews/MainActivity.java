@@ -79,14 +79,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public static class MyAdapter extends SmartFragmentStatePagerAdapter {
+    public class MyAdapter extends SmartFragmentStatePagerAdapter {
         Integer newsCount;
         JSONArray articleJson;
+        LoadingCardFragment loadingCardFragment;
 
         MyAdapter(FragmentManager fm, int articleCount, JSONArray articleJson) {
             super(fm);
             this.newsCount = articleCount;
             this.articleJson = articleJson;
+            loadingCardFragment = new LoadingCardFragment();
         }
 
         @Override
@@ -102,8 +104,7 @@ public class MainActivity extends AppCompatActivity {
             JSONObject article;
             NewsCard card = null;
 
-
-            if (this.articleJson != null) {
+            if (this.articleJson != null && position <= newsCount) {
                 try {
                     card = new NewsCard(articleJson.getJSONObject(position));
                     return NewsCardFragment.newInstance(card);
@@ -113,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            return new LoadingCardFragment();
+            return loadingCardFragment;
 //            if (position <= getCount() && articleJson != null) {
 //                return NewsCardFragment.newInstance("NEWS 0", Color.WHITE);
 //            }
