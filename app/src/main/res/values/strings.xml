@@ -5,4 +5,5 @@
     <string name="defaultSourcePlaceHolder">Source: Anonymous</string>
     <string name="defaultDescriptionPlaceHolder">Please Refresh . . .</string>
     <string name="defaultGoogeNewsSourceText">Powered By Google News.</string>
+    <string name="loading_news_caption">Fetching top headlines for you.</string>
 </resources>
