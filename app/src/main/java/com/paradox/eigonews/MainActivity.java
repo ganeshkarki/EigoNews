@@ -3,6 +3,7 @@ package com.paradox.eigonews;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -52,8 +53,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    newsCount = response.getInt("totalResults");
+                    // TODO: BUG in news API possibly, count mismatches with article count
+                    // newsCount = response.getInt("totalResults");
                     articleJson = response.getJSONArray("articles");
+                    newsCount = articleJson.length();
 
                     mAdapter.update(newsCount, articleJson);
                     Toast.makeText(MainActivity.this, "News fetched", Toast.LENGTH_LONG).show();
@@ -79,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public class MyAdapter extends SmartFragmentStatePagerAdapter {
+    public class MyAdapter extends FragmentStatePagerAdapter {
         Integer newsCount;
         JSONArray articleJson;
         LoadingCardFragment loadingCardFragment;
@@ -99,10 +102,8 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            String url = "";
-            String title = "";
-            JSONObject article;
-            NewsCard card = null;
+            NewsCard card;
+            Log.d(TAG, "getItem position: " + position);
 
             if (this.articleJson != null && position <= newsCount) {
                 try {
@@ -115,24 +116,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
             return loadingCardFragment;
-//            if (position <= getCount() && articleJson != null) {
-//                return NewsCardFragment.newInstance("NEWS 0", Color.WHITE);
-//            }
-
-//            Log.e(TAG, "Trying to get wrong position: " + position);
-//            return null;
-
-
-//            switch (position) {
-//                case 0:
-//                    return NewsCardFragment.newInstance("NEWS 0", Color.WHITE);
-//                case 1:
-//                    // return a different Fragment class here
-//                    // if you want want a completely different layout
-//                    return NewsCardFragment.newInstance("NEWS 1", Color.CYAN);
-//                default:
-//                    return null;
-//            }
         }
 
         void update(Integer newsCount, JSONArray articleJson) {
@@ -142,16 +125,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public int getItemPosition(@NonNull Object item) {
-//            TODO: Don't allow to swipe once reached end of Cards.
-//            NewsCardFragment fragment = (NewsCardFragment) item;
-//            String title = fragment.getTitle();
-//            int position = titles.indexOf(title);
-//
-//            if (position >= 0) {
-//                return position;
-//            } else {
-                return POSITION_NONE;
-//            }
+            // TODO: Check if always NONE OK?
+            return POSITION_NONE;
         }
     }
 
