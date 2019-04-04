@@ -1,11 +1,11 @@
 package com.paradox.eigonews;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +18,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.NetworkImageView;
+import com.google.cloud.translate.Translate;
+import com.google.cloud.translate.TranslateOptions;
+import com.google.cloud.translate.Translation;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -182,6 +185,16 @@ public class MainActivity extends AppCompatActivity {
             titleText.setText(articleTitle);
             descriptionText.setText(articleDescription);
             sourceText.setText(articleSource);
+
+//            Translate translate = TranslateOptions.getDefaultInstance().getService();
+//
+//            Translation translation =
+//                    translate.translate(
+//                            articleTitle,
+//                            Translate.TranslateOption.sourceLanguage("jp"),
+//                            Translate.TranslateOption.targetLanguage("en"));
+//            titleText.setText(translation.getTranslatedText());
+// https://medium.com/@amsanjeev/adding-translate-api-to-android-apps-788c5bca5521
             return v;
         }
     }
