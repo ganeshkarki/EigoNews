@@ -7,7 +7,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -26,7 +28,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity
+        implements GestureDetector.OnDoubleTapListener{
 
     MyAdapter mAdapter;
     VerticalViewPager mPager;
@@ -82,6 +87,24 @@ public class MainActivity extends AppCompatActivity {
 
         // Access the RequestQueue through your singleton class.
         MySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
+    }
+
+    @Override
+    public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
+        Toast.makeText(MainActivity.this, "onSingleTapConfirmed", Toast.LENGTH_LONG).show();
+        return false;
+    }
+
+    @Override
+    public boolean onDoubleTap(MotionEvent motionEvent) {
+        Toast.makeText(MainActivity.this, "onDoubleTap", Toast.LENGTH_LONG).show();
+        return false;
+    }
+
+    @Override
+    public boolean onDoubleTapEvent(MotionEvent motionEvent) {
+        Toast.makeText(MainActivity.this, "onDoubleTapEvent", Toast.LENGTH_LONG).show();
+        return false;
     }
 
 
@@ -177,8 +200,8 @@ public class MainActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.fragment_news_card, container, false);
             NetworkImageView imgView = v.findViewById(R.id.imageView);
-            TextView titleText = v.findViewById(R.id.articleTitleText);
-            TextView descriptionText = v.findViewById(R.id.articleContentText);
+            final TextView titleText = v.findViewById(R.id.articleTitleText);
+            final TextView descriptionText = v.findViewById(R.id.articleContentText);
             TextView sourceText = v.findViewById(R.id.sourceCreditText);
 
             imgView.setImageUrl(articleImgUrl, MySingleton.getInstance(getActivity()).getImageLoader());
@@ -186,15 +209,18 @@ public class MainActivity extends AppCompatActivity {
             descriptionText.setText(articleDescription);
             sourceText.setText(articleSource);
 
-//            Translate translate = TranslateOptions.getDefaultInstance().getService();
-//
-//            Translation translation =
-//                    translate.translate(
-//                            articleTitle,
-//                            Translate.TranslateOption.sourceLanguage("jp"),
-//                            Translate.TranslateOption.targetLanguage("en"));
-//            titleText.setText(translation.getTranslatedText());
-// https://medium.com/@amsanjeev/adding-translate-api-to-android-apps-788c5bca5521
+
+            TranslateTask translateTask = new TranslateTask(this.getActivity()) {
+                @Override
+                public void receiveData(Object object) {
+                    ArrayList<String> result = (ArrayList<String>)object;
+                    titleText.setText(result.get(0));
+                    descriptionText.setText(result.get(1));
+                }
+            };
+
+            translateTask.execute(articleTitle, articleDescription);
+
             return v;
         }
     }
